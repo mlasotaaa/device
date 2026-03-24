@@ -1,0 +1,42 @@
+services:
+  device-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db-postgresql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/device
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=device
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    volumes:
+      - device-data:/device-data
+
+  db-postgresql:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: device
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: device
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  device-data:
