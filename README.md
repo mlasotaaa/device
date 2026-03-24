@@ -20,7 +20,7 @@ mvn clean package
 **Step 2: Start the containers**
 Once the build is successful and the app.jar file is generated in the target/ directory, start the Docker containers:
 ```bash
-docker compose up -d --build
+DB_NAME=device DB_USER=device DB_PASSWORD=device docker compose up -d --build
 ```
 
 Useful Commands
