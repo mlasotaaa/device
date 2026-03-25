@@ -4,6 +4,16 @@
       "include": {
         "file": "db/changelog/changes/001-create-devices.sql"
       }
+    },
+    {
+      "include": {
+        "file": "db/changelog/changes/002-change-device-uuid-column-to-device-id.sql"
+      }
+    },
+    {
+      "include": {
+        "file": "db/changelog/changes/003-update-device-state-constraints-to-uppercase.sql"
+      }
     }
   ]
 }
