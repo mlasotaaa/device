@@ -19,6 +19,14 @@ public record Device(
         DomainAssertion.assertNotNull(deviceBrand, "deviceBrand");
         DomainAssertion.assertNotNull(deviceState, "deviceState");
         DomainAssertion.assertNotNull(createdAt, "createdAt");
+        /**
+         * Truncating to microseconds is necessary because PostgreSQL's TIMESTAMP WITH TIME ZONE
+         * (and the underlying JDBC driver) typically supports 6 fractional digits.
+         * * Java's Instant supports nanoseconds (9 digits), which causes assertion failures
+         * in integration tests when comparing the object sent to the database with
+         * the one retrieved from it.
+         */
+        createdAt = createdAt.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
     }
 
     public static Device create(DeviceName deviceName, DeviceBrand deviceBrand, DeviceState deviceState) {
