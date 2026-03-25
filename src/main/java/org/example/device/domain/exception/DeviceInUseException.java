@@ -9,7 +9,7 @@ public class DeviceInUseException extends RuntimeException {
     }
 
     public static DeviceInUseException forUpdate(DeviceId id) {
-        return new DeviceInUseException(String.format("Cannot update device %s because it is currently IN_USE.", id));
+        return new DeviceInUseException(String.format("Cannot update device %s because it is currently IN_USE.", id.value()));
     }
 
     public static DeviceInUseException forDeletion(DeviceId id) {

@@ -6,13 +6,17 @@ import org.example.device.application.command.CreateDeviceCommand;
 import org.example.device.application.command.UpdateDeviceCommand;
 import org.example.device.domain.exception.DeviceNotFoundException;
 import org.example.device.domain.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
 
+    @Autowired
     public DeviceServiceImpl(final DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
     }
