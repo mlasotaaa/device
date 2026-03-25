@@ -53,6 +53,21 @@ class DeviceTest {
     }
 
     @Test
+    void shouldUpdateOnlyStateInUseToInActive() {
+        // given
+        Device device = Device.create(new DeviceName("OldName"), new DeviceBrand("OldBrand"), DeviceState.IN_USE);
+
+        // when
+        Device updated = device.update(null, null, DeviceState.INACTIVE);
+
+        // then
+        assertEquals(new DeviceName("OldName"), updated.deviceName());
+        assertEquals(new DeviceBrand("OldBrand"), updated.deviceBrand());
+        assertEquals(DeviceState.INACTIVE, updated.deviceState());
+        assertEquals(device.createdAt(), updated.createdAt());
+    }
+
+    @Test
     void shouldUpdateOnlyStateWhenOtherFieldsAreSame() {
         // given
         Device device = Device.create(new DeviceName("OldName"), new DeviceBrand("OldBrand"), DeviceState.AVAILABLE);
