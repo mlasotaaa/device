@@ -1,4 +1,11 @@
 package org.example.device.infrastructure.rest;
 
-record UpdatePartiallyDeviceRequest(String brand, String name, String status) {
+import jakarta.validation.constraints.Pattern;
+
+record UpdatePartiallyDeviceRequest(String brand,
+                                    String name,
+                                    @Pattern(
+                                            regexp = "AVAILABLE|INACTIVE|IN_USE",
+                                            message = "State must be AVAILABLE or INACTIVE or IN_USE"
+                                    ) String status) {
 }
