@@ -1,8 +1,9 @@
 package org.example.device.domain.exception;
 
+import org.example.common.domain.DomainException;
 import org.example.device.domain.model.DeviceId;
 
-public class DeviceNotFoundException extends RuntimeException {
+public class DeviceNotFoundException extends DomainException {
 
     private DeviceNotFoundException(String message) {
         super(message);

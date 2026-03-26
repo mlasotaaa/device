@@ -1,8 +1,9 @@
 package org.example.device.domain.exception;
 
+import org.example.common.domain.DomainException;
 import org.example.device.domain.model.DeviceId;
 
-public class DeviceInUseException extends RuntimeException {
+public class DeviceInUseException extends DomainException {
 
     private DeviceInUseException(String message) {
         super(message);
