@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 public record Device(
+        Long id,
         DeviceId deviceId,
         DeviceName deviceName,
         DeviceBrand deviceBrand,
@@ -30,7 +31,7 @@ public record Device(
     }
 
     public static Device create(DeviceName deviceName, DeviceBrand deviceBrand, DeviceState deviceState) {
-        return new Device(DeviceId.of(), deviceName, deviceBrand, deviceState, Instant.now());
+        return new Device(null, DeviceId.of(), deviceName, deviceBrand, deviceState, Instant.now());
     }
 
     public Device update(DeviceName newName, DeviceBrand newBrand, DeviceState newState) {
@@ -44,6 +45,7 @@ public record Device(
         }
 
         return new Device(
+                this.id,
                 this.deviceId,
                 Optional.ofNullable(newName).orElse(this.deviceName),
                 Optional.ofNullable(newBrand).orElse(this.deviceBrand),

@@ -5,11 +5,12 @@ import org.example.device.application.command.UpdateDeviceCommand;
 import org.example.device.domain.exception.DeviceInUseException;
 import org.example.device.domain.exception.DeviceNotFoundException;
 import org.example.device.domain.model.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
@@ -19,18 +20,24 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional // to clean database after each test
 class DeviceServiceTest {
 
     @Autowired
     private DeviceService deviceService;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18-alpine");
-
     static {
         postgres.start();
+    }
+
+    @AfterEach
+    void cleanAfterEachTest() {
+        jdbcTemplate.execute("TRUNCATE TABLE devices CASCADE");
     }
 
     @Test
@@ -72,6 +79,38 @@ class DeviceServiceTest {
         assertEquals(new DeviceName("Updated Device name"), updatedDevice.deviceName());
         assertEquals(new DeviceBrand("Apple"), updatedDevice.deviceBrand());
         assertEquals(DeviceState.AVAILABLE, updatedDevice.deviceState());
+    }
+
+    @Test
+    void shouldCreateOnceAndUpdateSavedDevice() {
+        // given
+        CreateDeviceCommand command = new CreateDeviceCommand(
+                new DeviceName("Iphone 17"),
+                new DeviceBrand("Apple"),
+                DeviceState.AVAILABLE
+        );
+
+        Device device = deviceService.createDevice(command);
+
+        // when
+        deviceService.updateDevice(
+                device.deviceId(),
+                new UpdateDeviceCommand(new DeviceName("Updated Device name"), null, null)
+        );
+
+        Device updatedDeviceSecondTime = deviceService.updateDevice(
+                device.deviceId(),
+                new UpdateDeviceCommand(new DeviceName("Second time updated Device name"), null, null)
+        );
+
+        // then
+        assertEquals(new DeviceName("Second time updated Device name"), updatedDeviceSecondTime.deviceName());
+        assertEquals(new DeviceBrand("Apple"), updatedDeviceSecondTime.deviceBrand());
+        assertEquals(DeviceState.AVAILABLE, updatedDeviceSecondTime.deviceState());
+
+        assertThat(List.of(updatedDeviceSecondTime))
+                .usingRecursiveComparison()
+                .isEqualTo(deviceService.getAllDevices());
     }
 
     @Test

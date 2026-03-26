@@ -8,7 +8,7 @@ class DeviceMapper {
 
     DeviceEntity toEntity(Device device) {
         return new DeviceEntity(
-                null,
+                device.id(),
                 device.deviceId().value(),
                 device.deviceName().value(),
                 device.deviceBrand().value(),
@@ -19,6 +19,7 @@ class DeviceMapper {
 
     Device toDomain(DeviceEntity entity) {
         return new Device(
+                entity.id(),
                 new DeviceId(entity.deviceId()),
                 new DeviceName(entity.name()),
                 new DeviceBrand(entity.brand()),
