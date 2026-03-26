@@ -56,7 +56,7 @@ Once the application is running, you can quickly interact with the API using you
 curl -X POST http://localhost:8080/api/v1/devices \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Iphone 17,
+    "name": "Iphone 17",
     "brand": "Apple",
     "state": "AVAILABLE"
   }'
