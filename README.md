@@ -46,6 +46,57 @@ The application uses Spring Boot profiles to adapt its configuration to specific
   * A strict profile intended for target production servers.
   * **API Documentation (Swagger):** DISABLED ❌ for security reasons (prevents exposing the API structure).
   * Optimized for performance (e.g., SQL query logging is disabled).
+
+### Testing the API
+
+Once the application is running, you can quickly interact with the API using your terminal.
+
+**1. Create a new device**
+```bash
+curl -X POST http://localhost:8080/api/v1/devices \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Iphone 17,
+    "brand": "Apple",
+    "state": "AVAILABLE"
+  }'
+```
+
+**2. Get all devices**
+```bash
+curl -X GET http://localhost:8080/api/v1/devices
+```
+
+**3. Get single device**
+```bash
+curl -X GET http://localhost:8080/api/v1/devices/123e4567-e89b-12d3-a456-426614174000
+```
+
+**4. Update fully or partially device**
+```bash
+curl -X PATCH http://localhost:8080/api/v1/devices/123e4567-e89b-12d3-a456-426614174000 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "state": "INACTIVE"
+  }'
+```
+
+**5. Get all device by state**
+```bash
+curl -X GET "http://localhost:8080/api/v1/devices?state=AVAILABLE"
+```
+
+**6. Get all device by brand**
+```bash
+curl -X GET "http://localhost:8080/api/v1/devices?brand=Apple"
+```
+
+**7. Remove device**
+```bash
+curl -X DELETE http://localhost:8080/api/v1/devices/123e4567-e89b-12d3-a456-426614174000
+```
+
+Other API are documented using swaggerAPI  (`test` environment) **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)**
 ## Project Architecture (Hexagonal / Onion Architecture)
 
 This project is designed based on the Hexagonal Architecture (Ports and Adapters) pattern, strictly adhering to the Dependency Rule. This means that the core business logic (Domain) is completely isolated from technical details (database, frameworks, API).
