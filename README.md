@@ -49,6 +49,9 @@ The current implementation of `DeviceService.updateDevice` uses a local `Reentra
 * **Retry Mechanism**: Use **Spring Retry** or **Resilience4j** to automatically re-invoke the update logic upon `OptimisticLockingFailureException`.
 
 ### Performance & Caching
+* **Pagination & Filtering**:
+  * *Current State:* List operations currently return all records, which is a performance risk as the database grows.
+  * *Recommendation:* Implement **Pagination**  This prevents high memory consumption (OOM) and reduces network payload size.
 * **Read-Through Caching**: Implement a caching layer (e.g., **Redis** or **Caffeine**) for `find` operations to reduce database load.
 * **Read/Write Splitting**: Leverage database read-replicas for non-locking queries to further scale read-heavy workloads.
 
@@ -61,6 +64,14 @@ The current implementation of `DeviceService.updateDevice` uses a local `Reentra
 * **Distributed Tracing**: Use **Spring Cloud Sleuth / Micrometer Tracing** with **Zipkin** or **Jaeger** to identify bottlenecks across service boundaries.
 * **Structured Logging**: Enhance debugging with correlation IDs and JSON-formatted logs for centralized management.
 
+### Security & Authorization
+The application is designed to be fully **Stateless**, ensuring compatibility with horizontal scaling and modern cloud environments.
+
+* **Recommended: JWT (JSON Web Token) Implementation**:
+    * It is **highly recommended** to implement JWT for securing device management endpoints.
+    * *Why JWT?* In a multi-instance environment, JWT allows any application replica to verify a user's identity and roles without needing to query a central session database or a specific server node.
+    * *Validation:* Access should be controlled via the `Authorization: Bearer <token>` header, using public-key cryptography for secure, decentralized verification.
+  
 ### CI/CD & Security Automation
 To ensure the reliability and security of the system throughout the Software Development Life Cycle (SDLC), the following automation pipeline is implemented/recommended:
 
