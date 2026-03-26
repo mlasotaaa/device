@@ -33,10 +33,42 @@ Stop and remove containers:
 docker compose down
 ```
 
-## Future Architectural Improvements
+## Project Architecture (Hexagonal / Onion Architecture)
+
+This project is designed based on the Hexagonal Architecture (Ports and Adapters) pattern, strictly adhering to the Dependency Rule. This means that the core business logic (Domain) is completely isolated from technical details (database, frameworks, API).
+
+The package structure is organized as follows:
+
+```text
+src/
+├── main/
+│   └── java/
+│       └── org/example/device/
+│           ├── domain/                 # System Core (Domain Model)
+│           │   ├── model/              # Value Objects (e.g., DeviceId, DeviceName) and Aggregates (Device)
+│           │   └── DomainException.java# Core business exceptions
+│           │
+│           ├── application/            # Application Layer (Use Cases / Application Services)
+│           │   ├── command/            # Intent objects (e.g., CreateDeviceCommand, UpdateDeviceCommand)
+│           │   └── DeviceService.java  # Application service orchestrating logic (Driving Port)
+│           │
+│           └── infrastructure/         # Infrastructure Layer (Adapters)
+│               ├── rest/               # Driving Adapters (Input)
+│               │   ├── DeviceController.java
+│               │   └── GlobalExceptionHandler.java
+│               │
+│               └── persistence/        # Driven Adapters (Output)
+│
+└── test/
+    └── java/
+        └── org/example/device/
+            ├── domain/                 # Unit tests for core business logic
+            └── infrastructure/         # Integration tests with Testcontainers (e.g., DeviceControllerTest)
+```           
+## Future Architectural Improvements (Recommendations)
 
 ### Horizontal Scaling & High Availability
-The current single-instance deployment represents a **Single Point of Failure (SPOF)**. To ensure system resilience and handle increased traffic, the following steps are planned:
+The current single-instance deployment represents a **Single Point of Failure (SPOF)**. To ensure system resilience and handle increased traffic, the following steps are recommended:
 * **Multi-Instance Deployment**: Scaling the application horyzontally (e.g., via Kubernetes Replicas) across multiple Availability Zones to ensure **High Availability (HA)**.
 * **Stateless Architecture**: Moving from local synchronization (like `ReentrantLock`) to a fully stateless model where any instance can process any request for any `deviceId`.
 * **Load Balancing**: Implementing a Load Balancer with health checks to distribute traffic evenly and take failing instances out of rotation.
@@ -73,7 +105,7 @@ The application is designed to be fully **Stateless**, ensuring compatibility wi
     * *Validation:* Access should be controlled via the `Authorization: Bearer <token>` header, using public-key cryptography for secure, decentralized verification.
   
 ### CI/CD & Security Automation
-To ensure the reliability and security of the system throughout the Software Development Life Cycle (SDLC), the following automation pipeline is implemented/recommended:
+To ensure the reliability and security of the system throughout the Software Development Life Cycle (SDLC), the following automation pipeline is recommended:
 
 * **Dependency-Track & SCA**: Integration with **OWASP Dependency-Track** to continuously monitor third-party libraries for known vulnerabilities (CVEs).
 * **Static Application Security Testing (SAST)**: Use tools like **SonarQube** or **Snyk** to scan the source code for security vulnerabilities, such as hardcoded secrets, SQL injection risks.
