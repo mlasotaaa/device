@@ -72,7 +72,7 @@ class DeviceControllerTest {
                 {
                     "name": "HTTP",
                     "brand": "Whatever",
-                    "status": "AVAILABLE"
+                    "state": "AVAILABLE"
                 }
                 """;
 
@@ -94,7 +94,7 @@ class DeviceControllerTest {
                 {
                     "name": "",
                     "brand": "",
-                    "status": "AVAILABLE"
+                    "state": "AVAILABLE"
                 }
                 """;
 
@@ -120,7 +120,7 @@ class DeviceControllerTest {
                 {
                     "name": "HTTP",
                     "brand": "Whatever",
-                    "status": "AVAILABLE"
+                    "state": "AVAILABLE"
                 }
                 """;
 
@@ -155,7 +155,7 @@ class DeviceControllerTest {
                 {
                     "name": "HTTP",
                     "brand": "Whatever",
-                    "status": "IN_USE"
+                    "state": "IN_USE"
                 }
                 """;
 
@@ -235,7 +235,7 @@ class DeviceControllerTest {
                 {
                     "name": "To Be Deleted",
                     "brand": "Temporary",
-                    "status": "AVAILABLE"
+                    "state": "AVAILABLE"
                 }
                 """;
 
@@ -257,14 +257,14 @@ class DeviceControllerTest {
                 {
                    "name":"Device 1",
                    "brand":"Brand A",
-                   "status":"AVAILABLE"
+                   "state":"AVAILABLE"
                 }
                 """);
         createDeviceRequest("""
                 {
                    "name":"Device 2",
                    "brand":"Brand B",
-                   "status":"IN_USE"
+                   "state":"IN_USE"
                 }
                 """);
 
@@ -283,14 +283,14 @@ class DeviceControllerTest {
                 {
                    "name":"Available 1",
                    "brand":"A",
-                   "status":"AVAILABLE"
+                   "state":"AVAILABLE"
                 }
                 """);
         createDeviceRequest("""
                 {
                    "name":"In Use 1",
                    "brand":"B",
-                   "status":"IN_USE"
+                   "state":"IN_USE"
                 }
                 """
         );
@@ -310,14 +310,14 @@ class DeviceControllerTest {
                 {
                    "name":"Macbook",
                    "brand":"Apple",
-                   "status":"AVAILABLE"
+                   "state":"AVAILABLE"
                 }
                 """);
         createDeviceRequest("""
                 {
                    "name":"Phone",
                    "brand":"Samsung",
-                   "status":"AVAILABLE"
+                   "state":"AVAILABLE"
                 }
                 """);
 

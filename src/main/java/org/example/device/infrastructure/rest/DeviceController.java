@@ -31,7 +31,7 @@ class DeviceController {
                 new CreateDeviceCommand(
                         Optional.ofNullable(createDeviceRequest.name()).map(DeviceName::new).orElse(null),
                         Optional.ofNullable(createDeviceRequest.brand()).map(DeviceBrand::new).orElse(null),
-                        Optional.ofNullable(createDeviceRequest.status()).map(DeviceState::valueOf).orElse(null)
+                        Optional.ofNullable(createDeviceRequest.state()).map(DeviceState::fromString).orElse(null)
                 )
         ));
     }
@@ -45,7 +45,7 @@ class DeviceController {
     List<DeviceResponse> getAllDevices(@RequestParam(required = false) String state,
                                        @RequestParam(required = false) String brand) {
         if (state != null) {
-            return DeviceResponse.of(deviceService.getDevicesByState(DeviceState.valueOf(state)));
+            return DeviceResponse.of(deviceService.getDevicesByState(DeviceState.fromString(state)));
         }
         if (brand != null) {
             return DeviceResponse.of(deviceService.getDevicesByBrand(new DeviceBrand(brand)));
@@ -60,14 +60,14 @@ class DeviceController {
                 new UpdateDeviceCommand(
                         Optional.ofNullable(updatePartiallyDeviceRequest.name()).map(DeviceName::new).orElse(null),
                         Optional.ofNullable(updatePartiallyDeviceRequest.brand()).map(DeviceBrand::new).orElse(null),
-                        Optional.ofNullable(updatePartiallyDeviceRequest.status()).map(DeviceState::valueOf).orElse(null)
+                        Optional.ofNullable(updatePartiallyDeviceRequest.state()).map(DeviceState::fromString).orElse(null)
                 )
         ));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteDevice(@PathVariable UUID id) {
+    void deleteDevice(@PathVariable @Valid UUID id) {
         deviceService.deleteDevice(new DeviceId(id));
     }
 }
