@@ -20,7 +20,7 @@ mvn clean package
 **Step 2: Start the containers**
 Once the build is successful and the app.jar file is generated in the target/ directory, start the Docker containers:
 ```bash
-DB_PORT=5432 DB_NAME=device DB_USER=device DB_PASSWORD=device docker compose up -d --build
+APP_PROFILE=test DB_PORT=5432 DB_NAME=device DB_USER=device DB_PASSWORD=device docker compose up -d --build
 ```
 
 Useful Commands
@@ -32,7 +32,20 @@ Stop and remove containers:
 ```bash
 docker compose down
 ```
+## 🌍 Environment Profiles and API Documentation
 
+The application uses Spring Boot profiles to adapt its configuration to specific runtime environments:
+
+* **`test` Profile (Local / Development)**
+  * The default profile used during coding and testing.
+  * **API Documentation (Swagger / OpenAPI):** ENABLED ✅
+  * After starting the application locally, the interactive documentation and endpoint testing UI are available at:
+    👉 **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)**
+
+* **`prod` Profile (Production)**
+  * A strict profile intended for target production servers.
+  * **API Documentation (Swagger):** DISABLED ❌ for security reasons (prevents exposing the API structure).
+  * Optimized for performance (e.g., SQL query logging is disabled).
 ## Project Architecture (Hexagonal / Onion Architecture)
 
 This project is designed based on the Hexagonal Architecture (Ports and Adapters) pattern, strictly adhering to the Dependency Rule. This means that the core business logic (Domain) is completely isolated from technical details (database, frameworks, API).
