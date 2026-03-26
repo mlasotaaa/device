@@ -53,14 +53,14 @@ class DeviceController {
         return DeviceResponse.of(deviceService.getAllDevices());
     }
 
-    @PutMapping("/{id}")
-    DeviceResponse updateDevice(@PathVariable UUID id, @RequestBody UpdateDeviceRequest updateDeviceRequest) {
+    @PatchMapping("/{id}")
+    DeviceResponse updatePartiallyDevice(@PathVariable UUID id, @RequestBody UpdatePartiallyDeviceRequest updatePartiallyDeviceRequest) {
         return DeviceResponse.of(deviceService.updateDevice(
                 new DeviceId(id),
                 new UpdateDeviceCommand(
-                        Optional.ofNullable(updateDeviceRequest.name()).map(DeviceName::new).orElse(null),
-                        Optional.ofNullable(updateDeviceRequest.brand()).map(DeviceBrand::new).orElse(null),
-                        Optional.ofNullable(updateDeviceRequest.status()).map(DeviceState::valueOf).orElse(null)
+                        Optional.ofNullable(updatePartiallyDeviceRequest.name()).map(DeviceName::new).orElse(null),
+                        Optional.ofNullable(updatePartiallyDeviceRequest.brand()).map(DeviceBrand::new).orElse(null),
+                        Optional.ofNullable(updatePartiallyDeviceRequest.status()).map(DeviceState::valueOf).orElse(null)
                 )
         ));
     }

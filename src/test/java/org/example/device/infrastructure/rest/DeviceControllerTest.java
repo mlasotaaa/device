@@ -136,7 +136,7 @@ class DeviceControllerTest {
                 }
                 """;
 
-        mockMvc.perform(put("/api/v1/devices/{id}", UUID.fromString(createdId))
+        mockMvc.perform(patch("/api/v1/devices/{id}", UUID.fromString(createdId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk());
@@ -171,7 +171,7 @@ class DeviceControllerTest {
                 }
                 """;
 
-        mockMvc.perform(put("/api/v1/devices/{id}", UUID.fromString(createdId))
+        mockMvc.perform(patch("/api/v1/devices/{id}", UUID.fromString(createdId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isUnprocessableContent())
@@ -219,7 +219,7 @@ class DeviceControllerTest {
                 """;
 
         // when & then
-        mockMvc.perform(put("/api/v1/devices/{id}", deviceId.value())
+        mockMvc.perform(patch("/api/v1/devices/{id}", deviceId.value())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isUnprocessableContent())
